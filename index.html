@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+            <meta name="format-detection" content="telephone=no" />
+            <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height" />
+            <title>Towchoice</title>
+            <link rel="stylesheet" href="css/jquery.mobile-1.4.0-beta.1.min.css">
+                <link rel="stylesheet" href="css/jqm-demos.css">
+                    <link rel="stylesheet" href="css/custom5.css">
+                        <link href="css/jquery.mobile.iscrollview.css" media="screen" rel="stylesheet" type="text/css" />
+                        <link href="css/jquery.mobile.iscrollview-pull.css" media="screen" rel="stylesheet" type="text/css" />
+                        <script src="js/jquery-1.8.2.min.js"></script>
+                        <script src="js/jquery.mobile-1.4.0-beta.1.min.js"></script>
+                        
+                        <script src="js/jquery.gritter.min.js"></script>
+                        <script src="js/pusher.js"></script>
+                        <script src="js/PusherNotifier.js"></script>
+                        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCauZSkGgnTM75hBM_8Fldn36rsKBHG3xI&sensor=false&libraries=places"></script>
+                        <script src="js/index1.js"></script>
+                        
+                        <script src="js/1.js"></script>
+                        <script type="text/javascript" src="js/iscroll.js"></script>
+                        <script type="text/javascript" src="js/jquery.mobile.iscrollview.js"></script>
+                        <script type="text/javascript" src="js/pull-example.js"></script>
+                        <script type="text/javascript" src="js/infobox.js"></script>
+                        <script type="text/javascript">
+                            $(document).ready(function(){
+                                              $('#OnloadTimerSetId').countDown({
+                                                                               targetOffset: {
+                                                                               'day': 0,
+                                                                               'month': 0,
+                                                                               'year': 0,
+                                                                               'hour': 0,
+                                                                               'min': 0,
+                                                                               'sec': 0
+                                                                               }
+                                                                               });
+                                              });
+                            </script>
+                        <script src="cordova.js"></script>
+                        </head>
+    <body onLoad="onLoad()">
+        
+        <div data-role="page" data-quicklinks="true" data-theme="b">
+            
+            <div data-role="content">
+                
+                <div class="ui-loader ui-corner-all ui-body-a ui-loader-default" style="display: block;"><span class="ui-icon ui-icon-loading"></span><h1>loading</h1></div>
+				<div id="checkactivecitystatus" style="display: none;"></div>
+            </div>
+            
+        </div><!-- /page -->
+        
+        
+        
+        <div data-role="page" data-quicklinks="true" id="newmobnoreg" data-theme="a" class="jqm-demos jqm-demos-index pull-demo-page" >
+            
+            <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+                
+                <h1 class="jqm-logo">Provider Sign Up</h1>
+                
+                <a href="#signinpage" data-icon="arrow-l" data-theme="b" data-transition="slide" data-direction="reverse" data-iconpos="notext"></a>
+                
+            </div><!-- /header -->
+            
+            
+            
+            <div data-role="content" data-iscroll="">
+                
+                <label style="float: right;" class="version"></label>
+                
+                <form method="post" name="provNewMobNoRegForm">
+                    
+                    <p>For first time registration, please provide your 10-digit phone number.</p>
+                    
+                    <input placeholder="1234567890" type="tel" maxlength="10" name="provMobileNo" id="provMobileNo" value="" onFocus="OnClickSucc(this.value,'provMobNoErrorMsg');" onBlur="OnClickError(this.value,'provMobNoErrorMsg');" onKeyPress="return isNumberKey(this.value)" />
+                    
+                    <li id="provmobilecountrycodeErrorMsg" style="display:none;color:#FF0000;">Please enter country code.</li>
+                    
+                    <li id="provMobNoErrorMsg" style="display:none;color:#FF0000;">Please enter 10 digit mobile number.</li>
+                    
+                    <li>You will be sent a one-time SMS text message to verify your phone number.</li>
+                    
+                </form>
+                
+                <button type="submit" data-theme="b" id="providerRegBtn">Next</button>
+                
+                <div data-role="popup" id="signinpopup" data-overlay-theme="a" data-theme="f" data-dismissible="false" style="max-width:400px;" class="ui-corner-all">
+                    
+					<div data-role="header" data-theme="f" class="ui-corner-top">
+                        
+						<h1>Sign In</h1>
+                        
+					</div>
+                    
+					<div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+                        
+						<h3 class="ui-title" style="text-align:center;">This number is already in use. Please sign in or register with another number.</h3>
+                        
+						<div style="text-align: center;"><a href="#signinpage" data-role="button" data-inline="true" data-theme="c" data-transition="slide">Sign In</a><a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Ok</a></div>
+                        
+					</div>
+                    
+				</div>
+                
+            </div>
+            
+            <!-- /content -->
+            
+        </div><!-- /page -->
+        
+        
+        
+        <div data-role="page" data-quicklinks="true" id="newmobverifypage" data-theme="a" class="jqm-demos jqm-demos-index pull-demo-page">
+            
+            <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+                
+                <h1 class="jqm-logo">Provider</h1>
+                
+            </div><!-- /header -->
+            
+            
+            
+            <div data-role="content" data-iscroll="">
+                
+                <form method="post" name="provLogFrom">
+                    
+                    <!--b id="verifyCode"></b-->
+                    
+                    <input type="hidden" name="verproviderid" id="verproviderid" value="">
+                        
+                        <input placeholder="Verify code number" type="tel" name="providerVerifyNo" id="providerVerifyNo" value="" onFocus="OnClickSucc(this.value,'provloginErrorMsg');" onBlur="OnClickError(this.value,'provloginErrorMsg');" />
+                        
+                        <!-- div id="provDevReg_id"></div -->
+                        
+                        </form>
+                
+                <li id="provloginErrorMsg" style="display:none;color:#FF0000;">The verification code is incorrent. Please check the code again.</li>
+                
+                <button type="submit" data-theme="b" id="providerLoginBtn">Verify</button>
+                
+            </div>
+            
+            <div data-position="fixed" style="text-align: center;"><a href="#newmobnoreg" data-theme="a" id="NewMobNoRegBtn" data-transition="slide" data-direction="reverse"><strong>Sign Up for Provider</strong></a></div>
+            
+            <!-- /content -->
+            
+        </div><!-- /page -->
+        
+        
+        
+        <div data-role="page" data-quicklinks="true" id="provprofilepage" data-theme="a" class="jqm-demos jqm-demos-index pull-demo-page">
+            
+            <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+                
+                <h1 class="jqm-logo">Set Profile Info</h1>
+                
+            </div><!-- /header -->
+            
+            
+            
+            <div data-role="content" class="jqm-content profilepagecontcls">
+                
+                <label style="float: right;" class="version"></label>
+                
+                <form method="post" name="provLogFrom">
+                    
+                	<input type="hidden" name="regversion" id="regversion" value="" />
+                    
+                    <label>First Name</label>
+                    
+                    <input placeholder="First Name" type="text" name="txtProviderName" id="txtProviderName" value="" onFocus="OnClickSucc(this.value,'profileNameErrorMsg');" onBlur="OnClickError(this.value,'profileNameErrorMsg');" />
+                    
+                    <li id="profileNameErrorMsg" style="display:none;color:#FF0000;">This field is required.</li>
+                    
+                    <label>Last Name</label>
+                    
+                    <input placeholder="Last Name" type="text" name="txtProviderLastName" id="txtProviderLastName" value="" onFocus="OnClickSucc(this.value,'profileLastNameErrorMsg');" onBlur="OnClickError(this.value,'profileLastNameErrorMsg');" />
+                    
+                    <li id="profileLastNameErrorMsg" style="display:none;color:#FF0000;">This field is required.</li>
+                    
+                    <label>Company Name</label>
+                    
+                    <input placeholder="Company Name" type="text" name="txtProviderComName" id="txtProviderComName" value="" onFocus="OnClickSucc(this.value,'txtCompNameErrorMsg');" onBlur="OnClickError(this.value,'txtCompNameErrorMsg');" />
+                    
+                    <li id="txtCompNameErrorMsg" style="display:none;color:#FF0000;">This field is required.</li>
+                    
+                    <label>Email Address</label>
+                    
+                    <input placeholder="Email Address" type="email" name="txtProviderEmailAdd" id="txtProviderEmailAdd" value="" onFocus="OnClickSuccEmail(this.value,'txtProviderEmailAddErrorMsg');" onBlur="OnClickErrorEmail(this.value,'txtProviderEmailAddErrorMsg');" onKeyUp="checkemailexists(this.value,'txtProviderEmailAllErrorMsg');" />
+                    
+                    <li id="txtProviderEmailAddErrorMsg" style="display:none;color:#FF0000;">Please enter valid email address.</li>
+                    
+                    <li id="txtProviderEmailAllErrorMsg" style="display:none;color:#FF0000;">Email address already in system. use another email addres.</li>
+                    
+                    <label>Password</label>
+                    
+                    <input placeholder="Password" type="password" name="txtProviderPassWord" id="txtProviderPassWord" value="" onFocus="OnClickSucc(this.value,'txtPasswordErrorMsg');" onBlur="OnClickError(this.value,'txtPasswordErrorMsg');" />
+                    
+                    <li id="txtPasswordErrorMsg" style="display:none;color:#FF0000;">This field is required.</li>
+                    
+                    <!-- <label>What area to service</label>
+                     
+                     <select name="select_choice_state" id="select_choice_state" data-theme="b" onChange="onChangeAjaxContentWithName('CityList',document.getElementById('select_choice_state').value,'DoNotKnow');"><option value="">State</option></select>
+                     
+                     <li id="txtProvStateErrorMsg" style="display:none;color:#FF0000;">This field is required.</li>
+                     
+                     <div id="mycitylist"><select name="select_choice_city" id="select_choice_city" data-theme="b"><option value="">City</option></select></div>
+                     
+                     <li id="txtProvCityErrorMsg" style="display:none;"></li>
+                     
+                     <!-- div id="mynearbycitylist"></div> -->
+                    
+                    <label>Your Current Location</label>
+                    
+                    <input data-type="search" placeholder="Your Current Location" type="text" name="txtcurrentlocation" id="txtcurrentlocation" value="" onFocus="OnClickSucc(this.value,'txtcurrentlocationerromsg');" onKeyPress="enterkeyfuncation(this.value,'txtcurrentlati','txtcurrentlong','txtcurrentlocation','txtcurrentlocationerromsg','provprofilepage')" />
+                    
+                    <!-- input placeholder="Your Current Location" type="text" name="txtcurrentlocation" id="txtcurrentlocation" value="" onFocus="OnClickSucc(this.value,'txtcurrentlocationerromsg');" onBlur="onBlurFunForGeolocation(this.value,latiId='txtcurrentlati',lngId='txtcurrentlong',addressId='txtcurrentlocation','txtcurrentlocationerromsg','provprofilepage');" onKeyPress="enterkeyfuncation(this.value,latiId='txtsetcurrentlati',lngId='txtsetcurrentlong',addressId='txtsetcurrentlocation','txtsetcurrentlocationerromsg','settingpage')" /> -->
+                    
+                    <li id="txtcurrentlocationerromsg" style="display:none;color:#FF0000;">Location information is unavailable.</li>
+                    
+                    <input type="hidden" name="txtcurrentlati" id="txtcurrentlati" value="">
+                        
+                        <input type="hidden" name="txtcurrentlong" id="txtcurrentlong" value="">
+                            
+                            <div id="abcd" class="abcd">
+                                
+                                <img src="images/Lock.png" width="32" height="32" onClick="setVisibility();"  alt=""/> </div>
+                            
+                            <div class="abc" id="abc" style="display:none;">
+                                
+                                <img src="images/Unlock.png" width="32" height="32" onClick="setVisibility1();"  alt=""/> </div>
+                            
+                            <div id="map_canvas" style="width:100%;height:355px;">loading...</div>
+                            
+                            <div id="crosshair_small"></div>
+                            
+                            <fieldset class="ui-grid-a">
+                                
+                                <div class="ui-block-a" style="width:20%; padding-top:8px;"><input placeholder="Radius" type="tel" name="txtradiuslocation" id="txtradiuslocation" value="30" onKeyPress="enterkeyfuncation(document.getElementById('txtcurrentlocation').value,'txtcurrentlati','txtcurrentlong','txtcurrentlocation','txtcurrentlocationerromsg','provprofilepage');" /></div>
+                                
+                                <div class="ui-block-b" style="width:80%;"><button type="button" data-theme="b" id="setradiuslocation">Set Radius in Miles</button></div>
+                                
+                            </fieldset>
+                            
+                            <li id="txtradiuslocationerromsg" style="display:none;color:#FF0000;">This field is required.</li>
+                            
+                            
+                            <input type="checkbox" name="selecallchk1" id="selecallchk1" class="custom" />
+                            <label for="selecallchk1">Select all / Unselect all</label>
+                            
+                            
+                            
+							<li class="notsupportedcityerrmsg" style="display:none;color:#FF0000;">The city you have selected is NOT active at the moment, please check back soon. Or contact us for more info.</li>
+                            
+                            
+                            
+                            <!--div id="txtdefradiusCity"><br><br><br></div-->
+                            
+                            <fieldset data-role="controlgroup" id="txtradiusCity"></fieldset>
+                            
+                            </form>
+                
+	            <!-- button type="submit" data-theme="b" id="setradiuslocation">Set Radius</button-->
+                
+                <button type="submit" data-theme="b" id="provProfileBtn">Save</button>
+                
+            </div>
+            
+            <!-- /content -->
+            
+        </div><!-- /page -->
+        
+        
+        
+        <div data-role="page" data-quicklinks="true" class="jqm-demos jqm-demos-index pull-demo-page" id="sphelplistmain">
+            
+            <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+                
+                <h1 class="jqm-logo">Help Request List</h1>
+                
+                <a href="#" style="display:none;"></a>
+                
+                <a href="#panel-nav" data-icon="bars" data-iconpos="notext">Navigation</a>
+                
+            </div><!-- /header -->
+            
+            
+            
+            <div data-iscroll="" data-role="content" class="jqm-content">
+                
+                <div class="iscroll-pulldown">
+                    
+                    <span class="iscroll-pull-icon"></span><span class="iscroll-pull-label"></span>
+                    
+                </div>
+                
+                <b id="LastUpHelpList" style="display: none;"></b>
+                
+                <b id="TotalHelpReq" style="display: none;">0</b>
+                
+                <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="c" id="helpListDataId"></ul>
+                
+                <div>&nbsp;</div>
+                
+                <div>
+                    
+                    <div class="animation_image" style="display:none;text-align:center;"><img src="images/ajax-loader.gif"> Loading...</div>
+                    
+                    <div id="load_more_button" style="display:none; text-align:center;">Load More</div>
+                    
+                </div>
+                
+            </div>
+            
+            <!-- /content -->
+            
+            <div data-role="panel" id="panel-nav" class="jqm-nav-panel" data-position="right" data-display="overlay" data-theme="a" data-position-fixed="true">
+                
+                <ul data-role="listview" data-inset="false" data-theme="a" data-divider-theme="a"  class="jqm-list">
+                    
+                    <li data-role="list-divider">Tow Choice <span class="version"></span></li>
+                    
+                    <li><label>Hi, <span class="welToProName"></span></label></li>
+                    
+                    <li id="helplinkpanel"><a href="#sphelplistmain" class="ui-btn ui-btn-icon-right ui-icon-carat-r ui-btn-active">Help Request</a></li>
+                    
+                    <li><a href="#spjoblistmain" id="serProListOfJobsP1" data-transition="slide" data-direction="reverse">My Jobs</a></li>
+                    
+                    <li><a href="#settingpage" data-transition="slide" data-direction="reverse">My Account</a></li>
+                    
+                    <li><a href="#" id="logoutdivid" data-transition="slide" data-direction="reverse">Logout</a></li>
+                    
+                </ul>
+                
+            </div><!-- /panel -->
+            
+            
+            
+        </div><!-- /page -->
+        
+        
+        
+        
+        
+        <div data-role="page" data-quicklinks="true" class="jqm-demos jqm-demos-index pull-demo-page" id="spjoblistmain">
+            
+            <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+                
+                <h1 class="jqm-logo">My Job List</h1>
+                
+                <a href="#" style="display:none;"></a>
+                
+                <a href="#panel-nav1" data-icon="bars" data-iconpos="notext">Navigation</a>
+                
+            </div><!-- /header -->
+            
+            
+            
+            <div data-iscroll="" data-role="content" class="jqm-content">
+                
+                <div class="iscroll-pulldown">
+                    
+                    <span class="iscroll-pull-icon"></span><span class="iscroll-pull-label"></span>
+                    
+                </div>
+                
+                <b id="LastUpSelJobId" style="display: none;"></b>
+                
+                <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="c" id="jobsListDataId"></ul>
+                
+            </div>
+            
+            <!-- /content -->
+            
+            
+            
+            <div data-role="panel" id="panel-nav1" class="jqm-nav-panel" data-position="right" data-display="overlay" data-theme="a" data-position-fixed="true">
+                
+                <ul data-role="listview" data-inset="false" data-theme="a" data-divider-theme="a"  class="jqm-list">
+                    
+                    <li data-role="list-divider">Tow Choice <span class="version"></span></li>
+                    
+                    <li><label>Hi, <span class="welToProName"></span></label></li>
+                    
+                    <li><a href="#sphelplistmain" data-transition="slide" data-direction="reverse">Help Request</a></li>
+                    
+                    <li id="joblinkpanel"><a href="#spjoblistmain" class="ui-btn ui-btn-icon-right ui-icon-carat-r ui-btn-active">My Jobs</a></li>
+                    
+                    <li><a href="#settingpage" data-transition="slide" data-direction="reverse">My Account</a></li>
+                    
+                    <li><a href="#" id="logoutdivid" data-transition="slide" data-direction="reverse">Logout</a></li>
+                    
+                </ul>
+                
+            </div><!-- /panel -->
+            
+            
+            
+        </div><!-- /page -->
+        
+        
+        
+        
+        
+        <div data-role="page" data-quicklinks="true" id="popupbidrep" class="jqm-demos jqm-demos-index pull-demo-page">
+            
+            <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+                
+                <h1 class="jqm-logo">Your Quote</h1>
+                
+                <a href="#sphelplistmain" data-icon="arrow-l" data-theme="b" data-transition="slide" data-direction="reverse" data-iconpos="notext"></a>
+                
+            </div><!-- /header -->
+            
+            
+            
+            <div data-iscroll="" data-role="content" class="jqm-content">
+                
+                <form method="post" name="BidForm">
+                    
+                    <input type="hidden" name="towtruck_id" id="towtruck_id" value="" />
+                    
+                    <div data-role="fieldcontain">
+    					<label for="time">Time :</label>
+    					<input placeholder=" Minutes" type="tel" name="time" id="time" value="" onFocus="OnClickSucc(this.value,'timeerrorMsg');" onBlur="OnClickError(this.value,'timeerrorMsg');" />
+    					<label for="chargePrice">Price :</label>
+    					<input placeholder=" Price" type="tel" name="chargePrice" id="chargePrice" value="" onFocus="OnClickSucc(this.value,'priceerrorMsg');" onBlur="OnClickError(this.value,'priceerrorMsg');" />
+                        <li id="timeerrorMsg" style="display:none;color:#FF0000;">Please enter quote time</li>
+                        <li id="priceerrorMsg" style="display:none;color:#FF0000;">Please enter quote price</li>
+                        <a href="#" data-role="button" id="subBidDataButton" data-theme="b">Submit Quote</a>
+                        
+					</div>
+                    
+                    
+                    <div id="hiddePopData"></div>
+                    
+                    
+                    
+                    <input type="hidden" name="breakdownLatitude" id="breakdownLatitude" value="" />
+                    
+                    <input type="hidden" name="breakdownLongitude" id="breakdownLongitude" value="" />
+                    
+                    <input type="hidden" name="prob_id" id="prob_id" value="" />
+                    
+                    <input type="hidden" name="help_id" id="help_id" value="" />
+                    
+                    <input type="hidden" name="cust_id" id="cust_id" value="" />
+                    
+                    <input type="hidden" name="dateHelp" id="dateHelp" value="" />
+                    
+                    
+                    
+                    <input type="hidden" name="popProLatitude" id="popProLatitude" value="" />
+                    
+                    <input type="hidden" name="popProLongtude" id="popProLongtude" value="" />
+                    
+                    
+                    
+                </form>
+                
+                
+            </div>
+            
+            
+            
+            <!-- /content -->
+            
+        </div><!-- /page -->
+        
+        
+        
+        <div data-role="page" data-quicklinks="true" id="viewbigmapandbidrep" class="jqm-demos jqm-demos-index">
+            
+            <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+                
+                <h1 class="jqm-logo">Help Details</h1>
+                
+                <a href="#sphelplistmain" data-direction="reverse" data-transition="slide" data-iconpos="notext" data-icon="arrow-l" data-theme="b"></a>
+                
+            </div><!-- /header -->
+            
+            
+            
+            <div data-role="content">
+                
+                <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="c">
+                    
+                    <li><div id="big_map_canvas_1" style="width:100%;"></div></li>
+                    
+                    <li id="helpviewinfodetail"></li>
+                    
+                </ul>
+                
+            </div>
+            
+            <!-- /content -->
+            
+        </div><!-- /page -->
+        
+		
+        
+        <div data-role="page" data-quicklinks="true" id="jobviewinfopage" class="jqm-demos jqm-demos-index">
+            
+            <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+                
+                <h1 class="jqm-logo">Help Details</h1>
+                
+                <a href="#spjoblistmain" data-direction="reverse" data-transition="slide" data-icon="arrow-l" data-theme="b" data-iconpos="notext"></a>
+                
+            </div><!-- /header -->
+            
+            
+            
+            <div data-role="content">
+                
+                <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="c">
+                    
+                    <li><div id="big_map_canvas_2" style="width:100%;"></div></li>
+                    
+                    <li id="jobviewinfodetail"></li>
+                    
+                </ul>
+                
+            </div>
+            
+            <!-- /content -->
+            
+        </div><!-- /page -->
+        
+        
+        
+        <div data-role="page" data-quicklinks="true" id="settingpage" class="jqm-demos jqm-demos-index pull-demo-page">
+            
+            <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+                
+                <h1 class="jqm-logo">My Account</h1>
+                
+                <a href="#" style="display:none;"></a>
+                
+                <a href="#panel-nav2" data-icon="bars" data-iconpos="notext">Navigation</a>
+                
+            </div><!-- /header -->
+            
+            
+            
+            <div data-role="content" class="jqm-content settingpagecontcls" >
+                
+                <div>
+                    
+                    <form method="post" name="accountsettingfrom">
+                        
+                        <label>First Name</label>
+                        
+                        <input placeholder="First Name" type="text" name="txtaccprofilename" id="txtaccprofilename" value="" onFocus="OnClickSucc(this.value,'txtaccprofilenameerrormsg');" onBlur="OnClickError(this.value,'txtaccprofilenameerrormsg');" />
+                        
+                        <li id="txtaccprofilenameerrormsg" style="display:none;color:#FF0000;">This field is required.</li>
+                        
+                        <label>Last Name</label>
+                        
+                        <input placeholder="Last Name" type="text" name="txtaccprofilelastname" id="txtaccprofilelastname" value="" onFocus="OnClickSucc(this.value,'txtaccprofilelastnameerrormsg');" onBlur="OnClickError(this.value,'txtaccprofilelastnameerrormsg');" />
+                        
+                        <li id="txtaccprofilelastnameerrormsg" style="display:none;color:#FF0000;">This field is required.</li>
+                        
+                        <label>Company Name</label>
+                        
+                        <input placeholder="Company Name" type="text" name="txtaccprofilecompname" id="txtaccprofilecompname" value="" onFocus="OnClickSucc(this.value,'txtaccprofilecompnameerrormsg');" onBlur="OnClickError(this.value,'txtaccprofilecompnameerrormsg');" />
+                        
+                        <li id="txtaccprofilecompnameerrormsg" style="display:none;color:#FF0000;">This field is required.</li>
+                        
+                        <label>Email Address</label>
+                        
+                        <input placeholder="Email Address" type="email" name="txtaccprofileEmailAdd1" id="txtaccprofileEmailAdd1" value="" disabled="disabled" />
+                        
+                        <input placeholder="Email Address" type="hidden" name="txtaccprofileEmailAdd" id="txtaccprofileEmailAdd" value="" onFocus="OnClickSucc(this.value,'txtaccprofileEmailAddErrorMsg');" onBlur="OnClickError(this.value,'txtaccprofileEmailAddErrorMsg');" />
+                        
+                        <li id="txtaccprofileEmailAddErrorMsg" style="display:none;color:#FF0000;">This field is required.</li>
+                        
+                        <label>Password</label>
+                        
+                        <input placeholder="New Password" type="password" name="txtaccproviderpass" id="txtaccproviderpass" value="" onFocus="OnClickSucc(this.value,'txtaccproviderpasserrormsg');" onBlur="OnClickError(this.value,'txtaccproviderpasserrormsg');" />
+                        
+                        <li id="txtaccproviderpasserrormsg" style="display:none;color:#FF0000;">This field is required.</li>
+                        
+                        <label for="callnotific">Call Notifications:</label>
+                        
+                        <select name="callnotific" id="callnotific" data-role="slider">
+                            
+                            <option value="No">Off</option>
+                            
+                            <option value="Yes">On</option>
+                            
+                        </select>
+                        
+                        <label for="smsnotific">Sms Notifications:</label>
+                        
+                        <select name="smsnotific" id="smsnotific" data-role="slider">
+                            
+                            <option value="No">Off</option>
+                            
+                            <option value="Yes">On</option>
+                            
+                        </select>
+                        
+                        <br>
+                        
+                        <label>Your Current Location</label>
+                        
+                        <!-- input placeholder="Set Current Location" type="text" name="txtsetcurrentlocation" id="txtsetcurrentlocation" value="" onFocus="OnClickSucc(this.value,'txtsetcurrentlocationerromsg');" onBlur="onBlurFunForGeolocation(this.value,latiId='txtsetcurrentlati',lngId='txtsetcurrentlong',addressId='txtsetcurrentlocation','txtsetcurrentlocationerromsg','settingpage');" onKeyPress="enterkeyfuncation(this.value,latiId='txtsetcurrentlati',lngId='txtsetcurrentlong',addressId='txtsetcurrentlocation','txtsetcurrentlocationerromsg','settingpage')" /> -->
+                        
+                        <input data-type="search" placeholder="Set Current Location" type="text" name="txtsetcurrentlocation" id="txtsetcurrentlocation" value="" onFocus="OnClickSucc(this.value,'txtsetcurrentlocationerromsg');" onKeyPress="enterkeyfuncation(this.value,'txtsetcurrentlati','txtsetcurrentlong','txtsetcurrentlocation','txtsetcurrentlocationerromsg','settingpage');" />
+                        
+                        <li id="txtsetcurrentlocationerromsg" style="display:none;color:#FF0000;">This field is required.</li>
+                        
+                        <input type="hidden" name="txtsetcurrentlati" id="txtsetcurrentlati" value="">
+                            
+                            <input type="hidden" name="txtsetcurrentlong" id="txtsetcurrentlong" value="">
+                                
+                                <div id="abcd" class="abcd">
+                                    
+                                    <img src="images/Lock.png" width="32" height="32" onClick="setVisibility();"  alt=""/> </div>
+                                
+                                <div class="abc" id="abc" style="display:none;">
+                                    
+                                    <img src="images/Unlock.png" width="32" height="32" onClick="setVisibility1();"  alt=""/> </div>
+                                
+                                <div id="set_map_canvas" style="width:100%;height:365px;">loading...</div>
+                                
+                                <div id=set_crosshair_small></div>
+                                
+                                
+                                
+                                
+                                
+                                <fieldset class="ui-grid-a">
+                                    
+                                    <div class="ui-block-a" style="width:20%; padding-top:8px;"><input placeholder="Miles" type="tel" name="txtsetradiuslocation" id="txtsetradiuslocation" value="" onKeyPress="enterkeyfuncation(document.getElementById('txtsetcurrentlocation').value,'txtsetcurrentlati','txtsetcurrentlong','txtsetcurrentlocation','txtsetcurrentlocationerromsg','settingpage');" /></div>
+                                    
+                                    <div class="ui-block-b" style="width:80%;"><button type="button" data-theme="b" id="setradiuslocationbtn1">Set Radius in Miles</button></div>
+                                    
+                                </fieldset>
+                                
+                                <li id="txtsetradiuslocationerromsg" style="display:none;color:#FF0000;">This field is required.</li>
+                                
+                                <input type="checkbox" name="selecallchk" id="selecallchk" class="custom" />
+                                <label for="selecallchk">Select all / Unselect all</label>
+                                
+                                
+                                
+                                <label class="notsupportedcityerrmsg" style="display:none;color:#FF0000;">The city you have selected is NOT active at the moment, please check back soon. Or <a id="opentowweb">contact us</a> for more info.</label>
+                                
+                                
+                                
+                                <!--div id="txtsetdefradiusCity"><br><br><br></div-->
+                                
+                                <fieldset data-role="controlgroup" id="txtsetradiusCity"></fieldset>
+                                
+                                </form>
+                    
+                    <button type="submit" data-theme="b" id="providersavebtn">Save</button>
+                    
+                </div>
+                
+            </div>
+            
+            <!-- /content -->
+            <div data-role="panel" id="panel-nav2" class="jqm-nav-panel" data-position="right" data-display="overlay" data-theme="a" data-position-fixed="true">
+                <ul data-role="listview" data-inset="false" data-theme="a" data-divider-theme="a"  class="jqm-list">
+                    <li data-role="list-divider">Tow Choice <span class="version"></span></li>
+                    <li><label>Hi, <span class="welToProName"></span></label></li>
+                    <li><a href="#sphelplistmain" data-transition="slide" data-direction="reverse">Help Request</a></li>
+                    <li><a href="#spjoblistmain" data-transition="slide" data-direction="reverse">My Jobs</a></li>
+                    <li id="accolinkpanel"><a href="#settingpage" class="ui-btn ui-btn-icon-right ui-icon-carat-r ui-btn-active">My Account</a></li>
+                    <li><a href="#" id="logoutdivid" data-transition="slide" data-direction="reverse">Logout</a></li>
+                </ul>
+            </div><!-- /panel -->
+        </div><!-- /page -->
+        
+        
+        <div data-role="page" id="signinpage" data-theme="a" class="jqm-demos jqm-demos-index">
+            <div data-role="content">
+                <div class="maincont">
+                    <div align="center"><img src="images/Tow-Choice.png" /></div><br>
+                    <br>
+	                <form method="post" name="signinFrom" runat="server" data-ajax="false">
+	                	<input type="hidden" name="loginversion" id="loginversion" value="" />
+                        <input placeholder="Email address" type="email" name="provEmail" id="provEmail" value="" onFocus="OnClickSucc(this.value,'provEmailErrorMsg');" onBlur="OnClickError(this.value,'provEmailErrorMsg');" />
+                        <input placeholder="Password" type="password" name="provPassWord" id="provPassWord" value="" onFocus="OnClickSucc(this.value,'provPassWordErrorMsg');" onBlur="OnClickError(this.value,'provPassWordErrorMsg');" />
+                        <li id="provEmailErrorMsg" style="display:none;color:#FF0000;">Please enter a valid email address.</li>
+                        <li id="provPassWordErrorMsg" style="display:none;color:#FF0000;">Please enter a valid password.</li>
+                    </form>
+                    <button type="submit" data-theme="b" id="provsigninbtn"><strong>Log In</strong></button>
+                    <br>
+                    <a href="#newmobnoreg" data-role="button" data-theme="c" data-transition="slide"><strong>Sign Up for Towchoice</strong></a>
+                    <div style="text-align: center;"><a href="#passwordrecoverpage" data-theme="a" id="passwordrecover" data-transition="slide"><strong>Can't access your account?</strong></a></div>
+                </div>
+			</div>
+            <!-- /content -->
+        </div><!-- /page -->
+        
+        
+        <div data-role="page" data-quicklinks="true" id="passwordrecoverpage" data-theme="a" class="jqm-demos jqm-demos-index pull-demo-page">
+            <div data-role="header" data-theme="a" data-position="fixed" data-tap-toggle="false">
+                <h1 class="jqm-logo">Password Recover</h1>
+                <a href="#signinpage" data-icon="arrow-l" data-theme="b" data-transition="slide" data-direction="reverse" data-iconpos="notext"></a>
+            </div><!-- /header -->
+            
+            
+            <div data-role="content" data-iscroll="">
+                <form method="post" name="passwordrecoverFrom">
+                    <input placeholder="Enter Email Address" type="email" name="provEmailAdd" id="provEmailAdd" value="" onFocus="OnClickSucc(this.value,'provEmailAddErrorMsg');" onBlur="OnClickError(this.value,'provEmailAddErrorMsg');" />
+                    <li style="display:none;"><input type="text" name="notuse" id="notuse" value="" /></li>
+                    <li id="provEmailAddErrorMsg" style="display:none;color:#FF0000;">Please enter a valid email address.</li>
+                </form>
+				<button type="submit" data-theme="b" id="provpasswordrecoverbtn"><strong>Submit</strong></button>
+            </div>
+            <!-- /content -->
+        </div><!-- /page -->
+        
+        
+        <div data-role="page" data-quicklinks="true" id="devicepushinfopage" data-theme="b" class="jqm-demos jqm-demos-index pull-demo-page">
+            <div data-role="header" data-theme="b" data-position="fixed" data-tap-toggle="false">
+                <h1 class="jqm-logo">Device push info</h1>
+            </div><!-- /header -->
+            
+            <div data-role="content" data-iscroll="">
+                <form method="post" name="deviceinfoFrom">
+                    <input type="text" name="devicepushid" id="devicepushid" value="" />
+                    <input type="text" name="deviceproviderid" id="deviceproviderid" value="" />
+                    <input type="text" name="deviceplatform" id="deviceplatform" value="" />
+                </form>
+            </div>
+            <!-- /content -->
+        </div><!-- /page -->
+        
+        
+    </body>
+</html>
