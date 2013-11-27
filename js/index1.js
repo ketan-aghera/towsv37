@@ -97,6 +97,8 @@ else
 }
 
 $(document).ready(function () {
+	
+	alert("ddd");
                   
                   createDatabase();
                   
